@@ -1,4 +1,3 @@
-import mlflow
 from sklearn.feature_extraction.text import TfidfTransformer
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.model_selection import train_test_split
@@ -7,7 +6,7 @@ from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_sc
 from pyspark.sql.functions import col, udf
 from pyspark.sql.types import StringType
 
-from data_preprocessing import create_pyspark_dataframe, clean_data
+from ultilities.data_processing import create_pyspark_dataframe, clean_data
 
 class Feedbacks_Classifier:
     def __init__(self) -> None:
@@ -17,7 +16,7 @@ class Feedbacks_Classifier:
         self.eval_model()
 
     def define_model(self):
-        self.model =  LogisticRegression(random_state=50, max_iter = 200)
+        self.model =  LogisticRegression(random_state=0, max_iter = 150)
     
     def define_data(self):
         sparkdf = create_pyspark_dataframe()
@@ -36,7 +35,6 @@ class Feedbacks_Classifier:
         self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(X_train_tf, y, test_size=0.25, random_state=16)
 
     def eval_model(self):
-        mlflow.sklearn.autolog()
         print(self.model)
         # Training
         self.model.fit(self.X_train,self.y_train)
@@ -57,7 +55,6 @@ class Feedbacks_Classifier:
         X_test_tfidf = self.tf_transformer.transform(X_test_count)
         test_label = self.model.predict(X_test_tfidf)
 
-        autolog_run = mlflow.last_active_run()
         return self.label_dict[test_label[0]]
 
 
