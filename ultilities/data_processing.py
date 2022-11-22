@@ -39,14 +39,14 @@ def clean_data(text):
 def load_data_from_datalake():
     query_job = client.query(
     """
-    SELECT sentence, sentiment FROM `mimetic-slice-343817.vi_student_feedbacks.data` LIMIT 10""")
+    SELECT sentence, sentiment FROM `mimetic-slice-343817.vi_student_feedbacks.data` LIMIT 15""")
     results = query_job.result()
     return results.to_dataframe()
 
 def load_cleaned_data():
     query_job = client.query(
     """
-    SELECT sentence, sentiment FROM `mimetic-slice-343817.vi_student_feedbacks.data_clean` LIMIT 10""")
+    SELECT sentence, sentiment FROM `mimetic-slice-343817.vi_student_feedbacks.data_clean`""")
     results = query_job.result()
     return results.to_dataframe()
 
@@ -68,7 +68,7 @@ def push_cleaned_data():
 def push_unlabeled_data(text):
     file_path = 'data/data_unlabeled.csv'
     
-    pd.DataFrame({'sentence': text, 'sentiment': ''}).to_csv(file_path, index=False)
+    pd.DataFrame({'sentence': [text], 'sentiment': ''}).to_csv(file_path, index=False)
     
     table_id = 'mimetic-slice-343817.vi_student_feedbacks.data_unlabeled'
     with open(file_path, "rb") as source_file:
@@ -92,7 +92,14 @@ def clean_data_from_database(isdatalake = False):
 
 if __name__ == "__main__":
     # print(load_cleaned_data().head())
-    # clean_data_from_database(True)
-    # print(load_cleaned_data().head())
+    #clean_data_from_database(True)
+    #print(load_cleaned_data().head())
+    #print(load_unlabeled_data().head())
 
-    print(load_unlabeled_data().head())
+    # file_path = 'data/data_clean.csv'
+    # df = pd.read_csv('data/vi_student_feedbacks.csv')
+    # sparkdf = create_pyspark_dataframe(df)
+    # cleaning_func = udf(lambda x : clean_data(x), StringType())
+    # sparkdf.withColumn('sentence', cleaning_func(col('sentence'))).toPandas().to_csv(file_path, index=False)
+
+    print(load_data_from_datalake().head(15))

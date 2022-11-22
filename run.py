@@ -2,6 +2,7 @@ import mlflow
 import mlflow.pyfunc
 
 import time
+import pandas as pd
 
 from sklearn.feature_extraction.text import  TfidfVectorizer
 from sklearn.model_selection import train_test_split
@@ -48,7 +49,8 @@ class Feedbacks_Classifier:
             pass
             
     def define_data(self):
-        df = load_cleaned_data()
+        #df = load_cleaned_data()
+        df = pd.read_csv('data/data_clean_archirved.csv')
 
         X = df['sentence']
         y = df['sentiment']
@@ -93,8 +95,8 @@ if __name__ == "__main__":
     
     #feedbacks_classifier.run_single_model('random-forest')
 
-    #feedbacks_classifier.run_all_models('test_all_model_on_data_22112022')
+    #feedbacks_classifier.run_all_models('comparing_models_22112022')
 
-    test_data = ['Thầy dạy hay lắm !!!']
+    test_data = 'Thầy dạy hay lắm !!!'
     #print(feedbacks_classifier.predict_from_local(test_data))
     print(feedbacks_classifier.predict_from_server(test_data))
