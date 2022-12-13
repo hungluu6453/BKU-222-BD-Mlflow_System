@@ -90,13 +90,7 @@ class Feedbacks_Classifier:
         return self.label_dict[test_label[0]], time.time() - start_time
 
 if __name__ == "__main__":
-    feedbacks_classifier = Feedbacks_Classifier(load_from_registry=True, model_name='Feedback_Anlayzer', stage='Production')
+    feedbacks_classifier = Feedbacks_Classifier(load_from_registry=False)
 
     
-    #feedbacks_classifier.run_single_model('random-forest')
-
-    #feedbacks_classifier.run_all_models('comparing_models_22112022')
-
-    test_data = 'Thầy dạy hay lắm !!!'
-    #print(feedbacks_classifier.predict_from_local(test_data))
-    print(feedbacks_classifier.predict_from_server(test_data))
+    feedbacks_classifier.run_single_model('random-forest', 'Testing 13122022')
